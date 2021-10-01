@@ -1,4 +1,5 @@
 from .pages.product_page import ProductPage
+from .pages.login_page import LoginPage
 import pytest
 
 #link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019"
@@ -16,35 +17,54 @@ import pytest
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer8",
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9"])
 def test_guest_can_add_product_to_basket(browser, link):
-    product = ProductPage(browser, link)  # инициализируем page object,
-    product.open()  # open the page with product
-    product.add_to_card()  # click to add to the basket button
-    product.solve_quiz_and_get_code()  # solve quiz
-    product.is_item_added_to_card()  # check that the product indeed added to the basket
+    page = ProductPage(browser, link)  # инициализируем page object,
+    page.open()  # open the page with product
+    page.add_to_card()  # click to add to the basket button
+    page.solve_quiz_and_get_code()  # solve quiz
+    page.is_item_added_to_card()  # check that the product indeed added to the basket
 
 
 # negative tests for presence of success message after adding to the card
 def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
     link = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/'
-    product = ProductPage(browser, link)  # инициализируем page object,
-    product.open()  # open the page with product
-    product.add_to_card()  # click to add to the basket button
-    product.should_not_be_success_message()
+    page = ProductPage(browser, link)  # инициализируем page object,
+    page.open()  # open the page with product
+    page.add_to_card()  # click to add to the basket button
+    page.should_not_be_success_message()
 
 
 def test_guest_cant_see_success_message(browser):
     link = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/'
-    product = ProductPage(browser, link)  # инициализируем page object,
-    product.open()  # open the page with product
-    product.should_not_be_success_message()
+    page = ProductPage(browser, link)  # инициализируем page object,
+    page.open()  # open the page with product
+    page.should_not_be_success_message()
 
 
 def test_message_disappeared_after_adding_product_to_basket(browser):
     link = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/'
-    product = ProductPage(browser, link)  # инициализируем page object,
-    product.open()  # open the page with product
-    product.add_to_card()  # click to add to the basket button
-    product.should_success_message_disappeared()
+    page = ProductPage(browser, link)  # инициализируем page object,
+    page.open()  # open the page with product
+    page.add_to_card()  # click to add to the basket button
+    page.should_success_message_disappeared()
+
+# go to the product page
+def test_guest_should_see_login_link_on_product_page(browser):
+    link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+    page = ProductPage(browser, link)
+    page.open()
+    page.should_be_login_link()
+
+
+def test_guest_can_go_to_login_page_from_product_page(browser):
+    link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+    page = ProductPage(browser, link)
+    page.open()
+    page.should_be_login_link()
+    page.go_to_login_page()
+    login_page = LoginPage(browser, browser.current_url)  # инициализация страницы логина
+    login_page.should_be_login_page()
+
+
 
 
 
