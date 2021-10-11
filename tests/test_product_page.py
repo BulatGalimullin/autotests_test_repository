@@ -2,6 +2,7 @@ from pages.product_page import ProductPage
 from pages.login_page import LoginPage
 from pages.basket_page import BasketPage
 import pytest
+import faker
 
 #link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019"
 
@@ -75,6 +76,35 @@ def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     basket_page = BasketPage(browser, browser.current_url)
     basket_page.should_be_empty_basket()
     basket_page.should_be_empty_basket_message()
+
+
+class TestUserAddToBasketFromProductPage:
+    @pytest.fixture(scope='function', autouse=True)
+    def setup(self, browser):
+        self.link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+        self.page = ProductPage(browser, self.link)
+        self.page.open()
+        self.page.go_to_login_page()
+        self.login_page = LoginPage(browser, browser.current_url)
+
+        f = faker.Faker() # faker object
+        email = f.email()  # fake email generation
+        password = self.login_page.password_generator(9) # password generation
+
+        self.login_page.register_new_user(email, password)
+        self.login_page.should_be_authorized_user()
+
+    def test_user_cant_see_success_message(self, browser):
+        page = ProductPage(browser, self.link)  # инициализируем page object,
+        page.open()  # open the page with product
+        page.should_not_be_success_message()
+
+    def test_user_can_add_product_to_basket(self, browser):
+        page = ProductPage(browser, self.link)  # инициализируем page object,
+        page.open()  # open the page with product
+        page.add_to_card()  # click to add to the basket button
+        page.is_item_added_to_card()  # check that the product indeed added to the basket
+
 
 
 
