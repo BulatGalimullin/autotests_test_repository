@@ -1,5 +1,6 @@
 from .base_page import BasePage
-from .locators import ProductPageLocators
+from locators import ProductPageLocators
+
 
 class ProductPage(BasePage):
     def is_review_button_presented_in_page(self):
