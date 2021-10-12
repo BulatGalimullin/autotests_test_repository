@@ -1,7 +1,7 @@
 from selenium.common.exceptions import NoSuchElementException, NoAlertPresentException, TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from locators import BasePageLocators
+from .locators import BasePageLocators
 import math
 
 
@@ -58,7 +58,6 @@ class BasePage:
             alert.accept()
         except NoAlertPresentException:
             print("No second alert presented")
-
 
     def go_to_basket_page(self):
         link = self.browser.find_element(*BasePageLocators.CARD_LINK)

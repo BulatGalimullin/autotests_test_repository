@@ -1,5 +1,5 @@
 from .base_page import BasePage
-from locators import LoginPageLocators
+from .locators import LoginPageLocators
 import string
 import random
 
